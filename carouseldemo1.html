@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      list-style: none
+    }
+
+    .wrapBox {
+      width: 400px;
+      margin: 50px auto;
+      position: relative;
+    }
+
+    .swiperBox img {
+      width: 100%;
+      display: none;
+    }
+
+    .swiperBox .active {
+      display: block;
+    }
+
+    .nav {
+      position: absolute;
+      right: 20px;
+      bottom: 25px;
+    }
+
+    .nav li {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #000;
+      float: left;
+      margin: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav .active {
+      background-color: red;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapBox">
+    <div class="swiperBox">
+      <img class="active" src="images/girlbig1.jpg" alt="">
+      <img src="images/girlbig2.jpg" alt="">
+      <img src="images/girlbig3.jpg" alt="">
+      <img src="images/girlbig4.jpg" alt="">
+    </div>
+    <ul class="nav">
+      <li class="active">1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+    </ul>
+  </div>
+</body>
+<script>
+  var oLi = document.querySelectorAll('li');
+  var oImg = document.querySelectorAll('img');
+  var timer ;
+  var index = 0;
+
+  start();
+  for (var i = 0; i < oLi.length; i++) {
+    oLi[i].index = i;
+    oLi[i].onmouseover = function () {
+      index = this.index;
+      end();
+      changeImg();
+    }
+    oLi[i].onmouseout = function () {
+      start();
+    }
+  }
+
+  // 开始轮播
+  function start() {
+    timer = setInterval(() => {
+      index++;
+      if (index > 3) {
+        index = 0;
+      }
+      changeImg();
+    }, 1000);
+  }
+
+  // 结束轮播
+  function end() {
+    if (timer) {
+      clearInterval(timer);
+    }
+  }
+
+  // 根据下标换图片
+  function changeImg() {
+    for (var i = 0; i < oImg.length; i++) {
+      oLi[i].className = "";
+      oImg[i].className = "";
+    }
+    oLi[index].className = "active";
+    oImg[index].className = "active";
+  }
+
+</script>
+
+</html>

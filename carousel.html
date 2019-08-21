@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .box {
+            width: 400px;
+            position: relative;
+            margin: 50px auto;
+        }
+
+        #picture {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        #picture img {
+            display: none;
+            width: 100%;
+        }
+
+        #picture .active {
+            display: block;
+        }
+
+        #list {
+            width: 100%;
+        }
+
+        li {
+            width: 24%;
+            float: left;
+            border: 2px solid #666;
+        }
+
+        li img {
+            width: 100%;
+        }
+
+        #list .active {
+            border-color: red;
+        }
+
+        .shadow {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(0, 0, 0, .3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #bigpicture {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            top: 0;
+            left: 500px;
+            overflow: hidden;
+            display: none;
+        }
+
+        #bigpicture img {
+            width: 1200px;
+            height: 1200px;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #bigpicture .active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div id="picture">
+            <img class="active" src="images/girlbig1.jpg" alt="">
+            <img src="images/girlbig2.jpg" alt="">
+            <img src="images/girlbig3.jpg" alt="">
+            <img src="images/girlbig4.jpg" alt="">
+            <div class="shadow"></div>
+        </div>
+        <ul id="list">
+            <li class="active"><img src="images/girlbig1.jpg" alt=""></li>
+            <li><img src="images/girlbig2.jpg" alt=""></li>
+            <li><img src="images/girlbig3.jpg" alt=""></li>
+            <li><img src="images/girlbig4.jpg" alt=""></li>
+        </ul>
+        <div id="bigpicture">
+            <img class="active" src="images/girlbig1.jpg" alt="">
+            <img src="images/girlbig2.jpg" alt="">
+            <img src="images/girlbig3.jpg" alt="">
+            <img src="images/girlbig4.jpg" alt="">
+        </div>
+
+    </div>
+</body>
+<script>
+    var oPicture = document.querySelector("#picture");
+    var oImg = document.querySelectorAll("#picture img");
+    var oLi = document.querySelectorAll("li");
+    var oBox = document.querySelector(".box");
+    var oShadow = document.querySelector(".shadow");
+    var oBigpicture = document.querySelector("#bigpicture");
+    var oBigimg = document.querySelectorAll("#bigpicture img");
+
+    var timer;
+    var index = 0;
+    start();
+    oBox.onmouseover = function () {
+        end();
+        oShadow.style.display = "block";
+        oBigpicture.style.display = "block"
+    }
+    for (i = 0; i < oLi.length; i++) {
+        oLi[i].index = i;
+        oLi[i].onmouseover = function () {
+            index = this.index;
+            changeImg();
+        }
+    }
+    oBox.onmouseout = function () {
+        start();
+        oShadow.style.display = "none";
+        oBigpicture.style.display = "none";
+    }
+
+    oPicture.onmousemove = function (e) {
+        var ev = event || e;
+        var x = ev.pageX - oBox.offsetLeft - oShadow.offsetWidth / 2;
+        var y = ev.pageY - oBox.offsetTop - oShadow.offsetHeight / 2;
+        maxLeft = oBox.offsetWidth - oShadow.offsetWidth;
+        maxTop = oBox.offsetHeight - oShadow.offsetHeight;
+        if (x <= 0) {
+            x = 0;
+        }
+        if (y <= 0) {
+            y = 0;
+        }
+        if (x >= maxLeft) {
+            x = maxLeft;
+        }
+        if (y >= maxTop) {
+            y = maxTop;
+        }
+        oShadow.style.left =`${x}px`;
+        oShadow.style.top = `${y}px`;
+        for (let i = 0; i < oBigimg.length; i++) {
+            oBigimg[i].style.left = -x * oBigpicture.offsetWidth/oShadow.offsetWidth + 'px';
+            oBigimg[i].style.top = -y * oBigpicture.offsetWidth/oShadow.offsetWidth + 'px';
+        }
+    }
+
+
+
+
+    function start() {
+        timer = setInterval(() => {
+            index++;
+            if (index > 3) {
+                index = 0;
+            }
+            changeImg();
+        }, 1000);
+    }
+
+    function end() {
+        if (timer) {
+            clearInterval(timer);
+        }
+    }
+
+    function changeImg() {
+        for (i = 0; i < oLi.length; i++) {
+            oImg[i].classList.remove("active");
+            oLi[i].classList.remove("active");
+            oBigimg[i].classList.remove("active");
+        }
+        oImg[index].classList.add("active");
+        oLi[index].classList.add("active");
+        oBigimg[index].classList.add("active");
+    }
+</script>
+
+</html>
